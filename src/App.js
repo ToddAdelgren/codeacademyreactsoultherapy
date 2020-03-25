@@ -4,7 +4,8 @@ import './App.css';
 function App() {
   return (
     <div>
-      React Soul Therapy
+      React Soul Therapy<br></br>
+      TODO: replace favicon.ico
     </div>
   );
 }
