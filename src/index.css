@@ -4,6 +4,9 @@ a:link, a:visited, a:hover, a:active {
 .b-header {
   border-bottom: 2px solid #ddd;
 }
+.b-footer {
+  border-top: 2px solid #ddd;
+}
 .c-light {
   color: #f252ce;
 }

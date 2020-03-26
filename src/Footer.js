@@ -1,30 +1,22 @@
 import React from 'react';
-import { BrowserRouter, NavLink, Route } from "react-router-dom";
-import TermsOfUse from './TermsOfUse';
-import PrivacyPolicy from './PrivacyPolicy';
+import { Link } from "react-router-dom";
 
 class Footer extends React.Component {
     render() {
         return (
-            <BrowserRouter>
-                <div className="content">
-                    <Route path="/termsofuse" component={TermsOfUse}/>
-                    <Route path="/privacypolicy" component={PrivacyPolicy}/>
-                </div>
-                <div className="container-fluid bt ht4">
-                    <div className="row text-center mt-4">
-                        <div className="col-4">
-                            Copy Right 2020
-                        </div>
-                        <div className="col-4">
-                            <NavLink to="/termsofuse">Terms Of Use</NavLink>
-                        </div>
-                        <div className="col-4">
-                            <NavLink to="/privacypolicy">Privacy Policy</NavLink>
-                        </div>
+            <div className="container-fluid b-footer ht4">
+                <div className="row text-center mt-4">
+                    <div className="col-4">
+                        Copy Right 2020
+                    </div>
+                    <div className="col-4">
+                        <Link to="/termsofuse">Terms Of Use</Link>
+                    </div>
+                    <div className="col-4">
+                        <Link to="/privacypolicy">Privacy Policy</Link>
                     </div>
                 </div>
-            </BrowserRouter>
+            </div>
         );
     }
 }

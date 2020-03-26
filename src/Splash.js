@@ -65,7 +65,7 @@ class Splash extends React.Component {
     }
 
     signup() {
-        console.log('signup()');
+        alert('signup()');
     }
 }
 

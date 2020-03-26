@@ -2,6 +2,8 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Splash from './Splash';
+import PrivacyPolicy from './PrivacyPolicy';
+import TermsOfUse from './TermsOfUse';
 
 function App() {
   return (
@@ -18,9 +20,9 @@ function App() {
         <Switch>
           <Route exact path="/" render={() => (<Redirect to="/Splash" />)} />
           <Route path="/Splash" component={Splash} />
+          <Route path="/PrivacyPolicy" component={PrivacyPolicy} />
+          <Route path="/TermsOfUse" component={TermsOfUse} />
           {/*
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/tasks" component={Tasks} />
           <Route path="/detail/:id" component={TaskDetail} />
           <Route component={PageNotFound}/>
           */}
