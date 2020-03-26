@@ -4,10 +4,9 @@ class PrivacyPolicy extends React.Component {
     render() {
         return (
             <div>
-                Privacy Policy
-                <Footer />
+                PrivacyPolicy Component
             </div>
-        );
+        )
     }
 }
 

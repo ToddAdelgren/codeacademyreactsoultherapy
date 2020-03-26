@@ -4,10 +4,9 @@ class TermsOfUse extends React.Component {
     render() {
         return (
             <div>
-                Terms Of Use
-                <Footer />
+                TermsOfUse Component
             </div>
-        );
+        )
     }
 }
 

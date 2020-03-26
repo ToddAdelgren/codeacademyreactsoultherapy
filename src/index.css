@@ -1,6 +1,31 @@
 a:link, a:visited, a:hover, a:active {
   color: #f252ce;
 }
-.bt {
-  border-top: 2px solid lightgrey;
+.b-header {
+  border-bottom: 2px solid #ddd;
 }
+.c-light {
+  color: #f252ce;
+}
+.c-soul {
+  color: #ed57cb;
+}
+.hidden {
+  display: none;
+}
+.ht4 {
+  height: 4rem;
+}
+.italic {
+  font-style: italic;
+}
+.mt-soul {
+  margin-top: .75rem;
+}
+.mw-700 {
+  max-width: 700px;
+}
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
