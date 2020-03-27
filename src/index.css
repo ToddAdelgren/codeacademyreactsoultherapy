@@ -28,6 +28,9 @@ a:link, a:visited, a:hover, a:active {
 .mw-700 {
   max-width: 700px;
 }
+.visible {
+  display: block;
+}
 
 
 html, body { height: 100%; }
