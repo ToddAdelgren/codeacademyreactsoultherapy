@@ -3,40 +3,68 @@ import { Link } from "react-router-dom";
 import Footer from './Footer';
 
 class Login extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            emailAddress: '',
+            password: '',
+            jwtToken: '',
+        }
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
         this.clearPrevMessags();
 
         if (this.fieldsAreValid()) {
-            console.info('FIELDS ARE VALID, CALL API');
+            this.props.setParentState('xxxxxxxxxxxxxxxxxx');
+            this.logUserIn()
         }
-
     }
 
     clearPrevMessags() {
-        // They may or may not be there.
+        // The following error messages may or may not be there.
         document.getElementById('email-address-required').classList.remove('visible');
         document.getElementById('password-required').classList.remove('visible');
     }
 
     fieldsAreValid() {
         let emailAddressElement = document.getElementById("email-address");
-        let enteredEmailAddress = emailAddressElement.value.trim();
-        if (enteredEmailAddress.length === 0) {
+        if (this.state.emailAddress.length === 0) {
             document.getElementById('email-address-required').classList.add('visible');
             emailAddressElement.focus();
             return false;
         }
 
         let passwordElement = document.getElementById("password");
-        let enteredPassword = passwordElement.value.trim();
-        if (enteredPassword.length === 0) {
+        if (this.state.password.length === 0) {
             document.getElementById('password-required').classList.add('visible');
             passwordElement.focus();
             return false;
         }
 
         return true;
+    }
+
+    logUserIn(argEmailAddress, argPassword) {
+        fetch('https://30xu029kx1.execute-api.us-east-2.amazonaws.com/prod/user/toddad@aol.com')
+        .then(function(response) {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' + response.status);
+                return;
+            }
+
+            // Examine the text in the response
+            response.json().then(function(data) {
+                console.log(data);
+            });
+
+        })
+        .catch(function(err) {
+            console.log('Fetch Error :-S', err);
+        });
+
+        //this.setParentState('123@abc.com', 'asdfasdf');
     }
 
     render() {
@@ -60,8 +88,10 @@ class Login extends React.Component {
                 <form onSubmit={this.handleSubmit} className="mt-4">
                     <div className="form-group">
                         <label>Email Address</label>
-                        <input type="text" className="form-control" name="email-address" id="email-address" />
-                        <div className="invalid-feedback" id="inv">
+                        <input type="text" className="form-control" name="email-address" id="email-address"
+                            value={this.state.emailAddress}
+                            onChange={e => this.setState({emailAddress: e.target.value})} />
+                        <div className="invalid-feedback" id="invalid-email-pass">
                             Invalid Email Address/Password combination. Please try again.
                         </div>
                         <div className="invalid-feedback" id="email-address-required">
@@ -70,7 +100,9 @@ class Login extends React.Component {
                     </div>
                     <div className="form-group">
                         <label>Password</label>
-                        <input type="password" className="form-control" name="password" id="password" />
+                        <input type="password" className="form-control" name="password" id="password"
+                            value={this.state.password}
+                            onChange={e => this.setState({password: e.target.value})} />
                         <div className="invalid-feedback" id="password-required">
                             Please enter Password
                         </div>
