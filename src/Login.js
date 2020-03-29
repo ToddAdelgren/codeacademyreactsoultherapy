@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Footer from './Footer';
 
 class Login extends React.Component {
@@ -8,24 +8,23 @@ class Login extends React.Component {
         this.state = {
             emailAddress: '',
             password: '',
-            jwtToken: '',
+            toJournal: false
         }
     }
-
     handleSubmit = (event) => {
         event.preventDefault();
-        this.clearPrevMessags();
+        this.clearPrevMessages();
 
         if (this.fieldsAreValid()) {
-            this.props.setParentState('xxxxxxxxxxxxxxxxxx');
             this.logUserIn()
         }
     }
 
-    clearPrevMessags() {
+    clearPrevMessages() {
         // The following error messages may or may not be there.
         document.getElementById('email-address-required').classList.remove('visible');
         document.getElementById('password-required').classList.remove('visible');
+        document.getElementById('invalid-email-pass').classList.remove('visible');
     }
 
     fieldsAreValid() {
@@ -46,28 +45,39 @@ class Login extends React.Component {
         return true;
     }
 
-    logUserIn(argEmailAddress, argPassword) {
-        fetch('https://30xu029kx1.execute-api.us-east-2.amazonaws.com/prod/user/toddad@aol.com')
-        .then(function(response) {
+    logUserIn() { 
+        fetch('https://30xu029kx1.execute-api.us-east-2.amazonaws.com/prod/apiuserlogin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"emailAddress":this.state.emailAddress,"password":this.state.password})
+        })
+        .then((response) => {
             if (response.status !== 200) {
-                console.log('Looks like there was a problem. Status Code: ' + response.status);
+                alert('Unexpected Error, please try to Login again.')
                 return;
             }
+            return response.json()  // Return the unpacked body.
+        }).then(res => {
+            if (res.Item.EmailAddress === '') {
+                document.getElementById('invalid-email-pass').classList.add('visible');
+                document.getElementById('email-address').focus();
+                return
+            }
 
-            // Examine the text in the response
-            response.json().then(function(data) {
-                console.log(data);
-            });
-
+            this.setState(() => ({toJournal: true}));
         })
         .catch(function(err) {
             console.log('Fetch Error :-S', err);
         });
-
-        //this.setParentState('123@abc.com', 'asdfasdf');
     }
 
     render() {
+        if (this.state.toJournal === true) {
+            return <Redirect to='/TermsOfUse'></Redirect>
+        }
+
         return (
         <div className="mw-700 mx-auto">
             <header className="container-fluid b-header ht4">
