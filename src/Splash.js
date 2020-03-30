@@ -1,9 +1,28 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Footer from './Footer';
 
 class Splash extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            emailAddress: '',
+            password: '',
+            toSignUp: false
+        }
+
+        this.signup = this.signup.bind(this);
+    }
+
+    signup() {
+        this.setState(() => ({toSignUp: true}));
+    }
+
     render() {
+        if (this.state.toSignUp === true) {
+            return <Redirect to='/SignUp'></Redirect>
+        }
+
         return (
             <div className="mw-700 mx-auto">
                 <header className="container-fluid b-header ht4">
@@ -62,10 +81,6 @@ class Splash extends React.Component {
                 <Footer />
             </div>
         )
-    }
-
-    signup() {
-        alert('signup()');
     }
 }
 
