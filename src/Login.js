@@ -75,7 +75,7 @@ class Login extends React.Component {
 
     render() {
         if (this.state.toJournal === true) {
-            return <Redirect to='/TermsOfUse'></Redirect>
+            return <Redirect to='/Journal'></Redirect>
         }
 
         return (
