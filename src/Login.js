@@ -11,6 +11,7 @@ class Login extends React.Component {
             toJournal: false
         }
     }
+    
     handleSubmit = (event) => {
         event.preventDefault();
         this.clearPrevMessages();

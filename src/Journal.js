@@ -12,12 +12,67 @@ class Journal extends React.Component {
         this.state = {
             journalDate: defaultDate,
             journalThoughts: '',
-            toJournal: false
+            provoker: 'Provoker loading...'
         }
     }
 
     componentDidMount() {
         document.getElementById('journal-thoughts').focus();
+
+        fetch('https://30xu029kx1.execute-api.us-east-2.amazonaws.com/prod/apiprovokerget/1', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            if (response.status !== 200) {
+                alert('Unexpected Error.')
+                return;
+            }
+            return response.json()  // Return the unpacked body.
+        }).then(res => {
+            this.setState({provoker: res.Item.Provoker});
+        })
+        .catch(function(err) {
+            alert('We apologize for the unexpected error: Fetch Error :-S', err);
+        });
+
+    }
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        this.clearPrevMessages();
+
+        if (this.fieldsAreValid()) {
+            //this.logUserIn()
+            console.log('FIELDS ARE VALID');
+        }
+    }
+
+    clearPrevMessages() {
+        // The following error messages may or may not be there.
+        document.getElementById('journal-date-required').classList.remove('visible');
+        document.getElementById('thoughts-required').classList.remove('visible');
+        document.getElementById('invalid-journal-date').classList.remove('visible');
+    }
+
+    fieldsAreValid() {
+        let dateElement = document.getElementById('journal-date');
+        if (this.state.journalDate.length === 0) {
+            document.getElementById('journal-date-required').classList.add('visible');
+            dateElement.focus();
+            return false;
+        }
+
+        let thoughtsElement = document.getElementById('journal-thoughts');
+        if (this.state.journalThoughts.length === 0) {
+            document.getElementById('thoughts-required').classList.add('visible');
+            thoughtsElement.focus();
+            return false;
+        }
+
+        return true;
     }
 
     render() {
@@ -51,7 +106,7 @@ class Journal extends React.Component {
                                 Please enter Date.
                             </div>
                         </div>
-                        <h1 className="my-5">Provoker Text Displayed Here</h1>
+                        <h1 className="my-5">{this.state.provoker}</h1>
                         <div className="form-group">
                             <label>Thoughts</label>
                             <textarea className="form-control" name="journal-thoughts" id="journal-thoughts" rows="5"
