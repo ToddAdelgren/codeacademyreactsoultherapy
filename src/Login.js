@@ -72,6 +72,8 @@ class Login extends React.Component {
             res.Item.ProvokerId = res.Item.ProvokerId + 1;
 
             localStorage.setItem('provokerBeingDisplayed', res.Item.ProvokerId);
+            localStorage.setItem('emailAddress', this.state.emailAddress);
+            localStorage.setItem('password', this.state.password);
 
             this.setState(() => ({toJournal: true}));
         })

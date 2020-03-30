@@ -12,32 +12,15 @@ class Journal extends React.Component {
         this.state = {
             journalDate: defaultDate,
             journalThoughts: '',
-            provoker: 'Provoker loading...'
+            provoker: 'Provoker loading...',
+            provokerBeingDisplayed: 0
         }
     }
 
     componentDidMount() {
         document.getElementById('journal-thoughts').focus();
 
-        fetch('https://30xu029kx1.execute-api.us-east-2.amazonaws.com/prod/apiprovokerget/1', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then((response) => {
-            if (response.status !== 200) {
-                alert('Unexpected Error.')
-                return;
-            }
-            return response.json()  // Return the unpacked body.
-        }).then(res => {
-            this.setState({provoker: res.Item.Provoker});
-        })
-        .catch(function(err) {
-            alert('We apologize for the unexpected error: Fetch Error :-S', err);
-        });
-
+        this.getProvoker();
     }
 
     handleSubmit = (event) => {
@@ -45,8 +28,8 @@ class Journal extends React.Component {
         this.clearPrevMessages();
 
         if (this.fieldsAreValid()) {
-            //this.logUserIn()
-            console.log('FIELDS ARE VALID');
+            this.putUser();
+            this.putJournalEntry();
         }
     }
 
@@ -73,6 +56,85 @@ class Journal extends React.Component {
         }
 
         return true;
+    }
+
+    putUser() {
+        fetch('https://30xu029kx1.execute-api.us-east-2.amazonaws.com/prod/apiuserput', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({  'emailAddress': localStorage.getItem('emailAddress'),
+                                    'password': localStorage.getItem('password'),
+                                    'provokerId': localStorage.getItem('provokerBeingDisplayed')
+                                })
+        })
+        .then((response) => {
+            if (response.status !== 200) {
+                alert('Unexpected Error, please try saving your Thoughts again.')
+                return;
+            }
+            return response.json()  // Return the unpacked body.
+        }).then(res => {
+        })
+        .catch(function(err) {
+            alert('We apologize for the unexpected error: Fetch Error :-S', err);
+        });
+    }
+
+    putJournalEntry() {
+        fetch('https://30xu029kx1.execute-api.us-east-2.amazonaws.com/prod/apijournalput', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({  'emailAddress': localStorage.getItem('emailAddress'),
+                                    'provokerId': localStorage.getItem('provokerBeingDisplayed'),
+                                    'journalDate': this.state.journalDate,
+                                    'journalThoughts': this.state.journalThoughts,
+                                })
+        })
+        .then((response) => {
+            if (response.status !== 200) {
+                alert('Unexpected Error, please try saving your Thoughts again.')
+                return;
+            }
+            return response.json()  // Return the unpacked body.
+        }).then(res => {
+            let nextProvoker = parseInt(localStorage.getItem('provokerBeingDisplayed')) + 1;
+            localStorage.setItem('provokerBeingDisplayed', nextProvoker);
+            this.setState({provokerBeingDisplayed: nextProvoker});
+            this.setState({journalThoughts: ''})
+            this.getProvoker();
+            document.getElementById('journal-thoughts').focus();
+
+        })
+        .catch(function(err) {
+            alert('We apologize for the unexpected error: Fetch Error :-S', err);
+        });
+    }
+
+    getProvoker() {
+        fetch('https://30xu029kx1.execute-api.us-east-2.amazonaws.com/prod/apiprovokerget/'+
+        localStorage.getItem('provokerBeingDisplayed'), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            if (response.status !== 200) {
+                alert('Unexpected Error.')
+                return;
+            }
+            return response.json()  // Return the unpacked body.
+        }).then(res => {
+            this.setState({provoker: res.Item.Provoker});
+        })
+        .catch(function(err) {
+            alert('We apologize for the unexpected error: Fetch Error :-S', err);
+        });
+
     }
 
     render() {
