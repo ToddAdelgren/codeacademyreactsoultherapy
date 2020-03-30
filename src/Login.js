@@ -66,10 +66,16 @@ class Login extends React.Component {
                 return
             }
 
+            // ProvokerId in table SoulTherapy is always the last ProvokerId the person finished.
+            // Increment it by 1 so the next one to be worked on is displayed.
+            res.Item.ProvokerId = res.Item.ProvokerId + 1;
+
+            localStorage.setItem('provokerBeingDisplayed', res.Item.ProvokerId);
+
             this.setState(() => ({toJournal: true}));
         })
         .catch(function(err) {
-            console.log('Fetch Error :-S', err);
+            alert('We apologize for the unexpected error: Fetch Error :-S', err);
         });
     }
 
